@@ -5,6 +5,9 @@ var i18n = {
   whitelistInfo: 'Hallo, dieser Bot benötigt eine Freischaltung. Bitte definiere deine Chat-Id in der Konfigurationsdatei',
   whitelistAdminInfo: 'Hallo, die Administrierung dieses Bots benötigt eine Freischaltung. Bitte definiere deine Chat-Id in der Konfigurationsdatei',
   hiReply: (name, chatId) => `Hallo ${name} \nDeine ChatID ist ${chatId}`,
+  hiAdminPrivateReply: (first_name, last_name, chatId) => `Hey Admin! \n${first_name} ${last_name} möchte seinen Chat mit der ID ${chatId} auf die Whitelist gesetzt bekommen.`,
+  hiAdminGroupReply: (first_name, last_name, groupName, chatId) => `Hey Admin! \n${first_name} ${last_name} möchte die Gruppe '${groupName}' mit der ID ${chatId} auf die Whitelist gesetzt bekommen.`,
+
   // Text der ausgegeben wird, wenn das empfangene Dokument ein nicht unterstütztes Dateiformat hat
   documentFormatError: 'Dieses Dokument hat ein unbekanntes Dateiformat.',
 };

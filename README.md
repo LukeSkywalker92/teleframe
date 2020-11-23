@@ -71,6 +71,13 @@ Also note that:
 
 ## Configuration
 
+### Basic Configuration
+Basic Configuration is very Easy. Just follow these Steps:
+1. Send /start to your Bot
+2. Send /settings to yout Bot an do the Basic Configuration
+
+### Advanced Configuration
+
 1. Copy `TeleFrame/config/config.example.json` to `TeleFrame/config/config.json`. \
    **Note:** If you used the installer script. This step is already done for you.
 

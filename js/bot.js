@@ -1,11 +1,14 @@
 const Telegraf = require("telegraf");
 const Telegram = require("telegraf/telegram");
 const Extra = require('telegraf/extra')
+const {MenuMiddleware} = require('telegraf-inline-menu')
 const download = require("image-downloader");
 const moment = require("moment");
 const exec = require("child_process").exec;
 const fs = require(`fs`);
 const botReply = require('./botReply');
+const botSendMessage = require('./botSendMessage');
+const botConfigMenu = require('./botConfigMenu');
 
 var Bot = class {
   constructor(
@@ -29,7 +32,11 @@ var Bot = class {
     });
 
     //Welcome message on bot start
-    this.bot.start((ctx) => botReply(ctx, 'welcome'));
+    this.bot.start((ctx) => this.welcomeUser(ctx));
+
+    //Some small conversation
+    this.bot.hears(/^hi/i, (ctx) => this.welcomeUser(ctx));
+
 
     //Help message
     this.bot.help((ctx) => botReply(ctx, 'help'));
@@ -151,13 +158,6 @@ var Bot = class {
       this.logger.error(err.stack);
     });
 
-    //Some small conversation
-    this.bot.hears(/^hi/i, (ctx) => {
-      botReply(ctx, 'hiReply', ctx.chat.first_name, ctx.chat.id);
-      this.logger.info(ctx.chat);
-    });
-
-
     //Add Admin Actions from config to Bot-Command
     if(this.config.adminAction.allowAdminAction ){
       var actions = this.config.adminAction.actions;
@@ -188,6 +188,11 @@ var Bot = class {
 
     }
 
+    //Menu
+    const menuMiddleware = new MenuMiddleware('/', botConfigMenu)
+    this.bot.command('settings', isAdminWhitelisted, async ctx => menuMiddleware.replyToContext(ctx))
+    this.bot.use(menuMiddleware.middleware())
+
     this.logger.info("Bot created!");
   }
 
@@ -210,6 +215,26 @@ var Bot = class {
   sendMessage(message) {
     // function to send messages, used for whitlist handling
     return this.bot.telegram.sendMessage(config.whitelistChats[0], message);
+  }
+
+  sendMessageToAdmin(ctx, constant, ...args) {
+    // function to send messages, used for informing Admin
+    config.whitelistAdmins.forEach(element => {
+      this.logger.info(element);
+      botSendMessage(this.bot.telegram, ctx, constant, element, ...args)
+    });
+  }
+
+  welcomeUser(ctx){
+    this.logger.info("User send start command to Bot!");
+
+    if(ctx.chat.type=='private'){
+      botReply(ctx, 'hiReply', ctx.chat.first_name, ctx.chat.id);
+      this.sendMessageToAdmin(ctx, "hiAdminPrivateReply", ctx.chat.first_name, ctx.chat.last_name, ctx.chat.id);
+    }else if(ctx.chat.type=='group'){
+      botReply(ctx, 'hiReply', ctx.chat.title, ctx.chat.id);
+      this.sendMessageToAdmin(ctx, "hiAdminGroupReply", ctx.from.first_name, ctx.from.last_name, ctx.chat.title, ctx.chat.id);
+    }
   }
 
   sendAudio(filename, chatId, messageId) {

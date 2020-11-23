@@ -32,6 +32,7 @@
     "sweetalert": "^2.1.2",
     "sweetalert2": "^9.5.4",
     "telegraf": "^3.35.0",
+    "telegraf-inline-menu": "^5.3.0",
     "velocity-animate": "^1.5.2",
     "winston": "^3.2.1"
   }

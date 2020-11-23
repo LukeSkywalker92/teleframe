@@ -17,6 +17,12 @@ var i18n = {
   // reply to 'hi' requires additional parameters - use a function
   hiReply: (name, chatId) => `Hey there ${name} \nYour ChatID is ${chatId}`,
 
+  // reply for admin on welcome message from user
+  hiAdminPrivateReply: (first_name, last_name, chatId) => `Hey Admin! \n${first_name} ${last_name} wants to add his Chat with the ID ${chatId}.`,
+
+  // reply for admin on welcome message from user in a group
+  hiAdminGroupReply: (first_name, last_name, groupName, chatId) => `Hey Admin! \n${first_name} ${last_name} wants to add the Group '${groupName}' with ID ${chatId}.`,
+
   // The error message if the received document has unknown format
   documentFormatError: 'This document has an unknown format.',
 
